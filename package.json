@@ -1,6 +1,6 @@
 {
   "name": "formula-desktop-memo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "A Windows 11 floating desktop memo app for Markdown math cards and spaced repetition.",
   "main": "dist-electron/main.cjs",
