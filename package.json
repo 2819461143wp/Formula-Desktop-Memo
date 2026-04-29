@@ -1,0 +1,104 @@
+{
+  "name": "formula-desktop-memo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A Windows 11 floating desktop memo app for Markdown math cards and spaced repetition.",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "dev": "npm run icons && npm run build:electron && concurrently -k \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite --host 127.0.0.1",
+    "dev:electron": "wait-on http://127.0.0.1:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron dist-electron/main.cjs",
+    "build": "npm run build:renderer && npm run build:electron",
+    "build:renderer": "vite build",
+    "build:electron": "tsup --config tsup.config.ts",
+    "icons": "node scripts/create-icons.cjs",
+    "dist": "npm run icons && npm run build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/ electron-builder --win nsis portable",
+    "test:unit": "vitest run",
+    "test": "npm run test:unit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "chokidar": "^4.0.0",
+    "dayjs": "^1.11.0",
+    "gray-matter": "^4.0.0",
+    "katex": "^0.16.0",
+    "lucide-react": "^0.468.0",
+    "marked": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanitize-html": "^2.13.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/sanitize-html": "^2.13.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "concurrently": "^9.0.0",
+    "cross-env": "^7.0.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "jsdom": "^25.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0",
+    "vitest": "^2.1.0",
+    "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "com.formula-desktop-memo.app",
+    "productName": "Formula Desktop Memo",
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "build/icon.ico",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "notes/sample.md",
+        "to": "sample-notes/sample.md"
+      },
+      {
+        "from": "build/icon.ico",
+        "to": "build/icon.ico"
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "icon": "build/icon.ico",
+    "win": {
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Formula Desktop Memo",
+      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}"
+    }
+  }
+}

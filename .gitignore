@@ -1,0 +1,14 @@
+node_modules/
+build/
+data/
+dist/
+dist-electron/
+release/
+coverage/
+.vite/
+npm-debug.log*
+*.log
+screen-check.png
+icon.png
+.env
+.env.*
